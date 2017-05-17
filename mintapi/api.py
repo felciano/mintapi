@@ -591,7 +591,6 @@ DATE_FMT = '%Y-%m-%d'
 ISO8601_FMT = '%Y-%m-%dT%H:%M:%SZ'
 EXCEL_FMT = '%Y-%m-%d %H:%M:%S'
 
-
 def make_accounts_presentable(accounts):
     for account in accounts:
         for k, v in account.items():
@@ -745,7 +744,7 @@ def main():
             skip_duplicates=options.skip_duplicates)
 
     # output the data
-    if options.transactions or options.extended_transactions:
+    if ((options.transactions or options.extended_transactions) and not options.net_worth):
         if options.filename is None:
             print(data.to_json(orient='records'))
         elif options.filename.endswith('.csv'):
