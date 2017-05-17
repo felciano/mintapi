@@ -587,12 +587,17 @@ def get_net_worth(email, password):
     account_data = mint.get_accounts()
     return mint.get_net_worth(account_data)
 
+DATE_FMT = '%Y-%m-%d'
+ISO8601_FMT = '%Y-%m-%dT%H:%M:%SZ'
+EXCEL_FMT = '%Y-%m-%d %H:%M:%S'
+
 
 def make_accounts_presentable(accounts):
     for account in accounts:
         for k, v in account.items():
             if isinstance(v, datetime):
-                account[k] = repr(v)
+                account[k] = v.strftime(EXCEL_FMT)
+                # account[k] = repr(v)
     return accounts
 
 
@@ -728,6 +733,8 @@ def main():
             )
         except:
             data = None
+    elif options.net_worth:
+        data = mint.get_net_worth()
     elif options.transactions:
         data = mint.get_transactions(include_investment=options.include_investment)
     elif options.extended_transactions:
@@ -736,8 +743,6 @@ def main():
             include_investment=options.include_investment,
             remove_pending=options.show_pending,
             skip_duplicates=options.skip_duplicates)
-    elif options.net_worth:
-        data = mint.get_net_worth()
 
     # output the data
     if options.transactions or options.extended_transactions:
