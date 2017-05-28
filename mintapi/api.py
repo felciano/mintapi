@@ -14,13 +14,10 @@ from datetime import date, datetime, timedelta
 import requests
 
 from requests.adapters import HTTPAdapter
-#try:
-#    print("Using requests pool manager")
-#    from requests.packages.urllib3.poolmanager import PoolManager
-#except:
-#  
-print("Using urllib3 pool manager")
-from urllib3.poolmanager import PoolManager
+try:
+    from requests.packages.urllib3.poolmanager import PoolManager
+except:
+    from urllib3.poolmanager import PoolManager
 
 import xmltodict
 
@@ -757,7 +754,7 @@ def main():
         elif options.filename.endswith('.json'):
             data.to_json(options.filename, orient='records')
         else:
-            raise ValueError('file extension must be either .csv, .json, or .jsonandcsv')
+            raise ValueError('file extension must be either .csv or .json')
     else:
         if options.filename is None:
             print(json.dumps(data, indent=2))
