@@ -1,7 +1,6 @@
 import json
 import random
 import time
-import os
 import re
 
 try:
@@ -142,8 +141,6 @@ class Mint(requests.Session):
         self.cookies.update(session_cookies)
 
         self.get('https://pf.intuit.com/fp/tags?js=0&org_id=v60nf4oj&session_id=' + self.cookies['ius_session'])
-
-        data = {'username': email, 'password': password}
 
         response = self.post('{}/access_client/sign_in'.format(MINT_ACCOUNTS_URL),
                              json=data, headers=self.json_headers).text
@@ -589,12 +586,15 @@ def get_net_worth(email, password):
     account_data = mint.get_accounts()
     return mint.get_net_worth(account_data)
 
+DATE_FMT = '%Y-%m-%d'
+ISO8601_FMT = '%Y-%m-%dT%H:%M:%SZ'
+EXCEL_FMT = '%Y-%m-%d %H:%M:%S'
 
 def make_accounts_presentable(accounts):
     for account in accounts:
         for k, v in account.items():
             if isinstance(v, datetime):
-                account[k] = repr(v)
+                account[k] = v.strftime(EXCEL_FMT)
     return accounts
 
 
@@ -750,7 +750,7 @@ def main():
         elif options.filename.endswith('.json'):
             data.to_json(options.filename, orient='records')
         else:
-            raise ValueError('file extension must be either .csv, .json, or .jsonandcsv')
+            raise ValueError('file extension must be either .csv or .json')
     else:
         if options.filename is None:
             print(json.dumps(data, indent=2))
