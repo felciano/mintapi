@@ -14,10 +14,13 @@ from datetime import date, datetime, timedelta
 import requests
 
 from requests.adapters import HTTPAdapter
-try:
-        from requests.packages.urllib3.poolmanager import PoolManager
-except:
-        from urllib3.poolmanager import PoolManager
+#try:
+#    print("Using requests pool manager")
+#    from requests.packages.urllib3.poolmanager import PoolManager
+#except:
+#  
+print("Using urllib3 pool manager")
+from urllib3.poolmanager import PoolManager
 
 import xmltodict
 
